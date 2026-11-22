@@ -36,10 +36,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
       - name: Commit a changed formula
         run: |
-          git diff --quiet && { echo "formula is up to date with $TAG"; exit 0; }
+          # Staged first, so the first formula, a new file, counts too.
+          git add Formula
+          git diff --cached --quiet && { echo "formula is up to date with $TAG"; exit 0; }
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -am "ldaplens ${TAG#v}"
+          git commit -m "ldaplens ${TAG#v}"
           git push
         env:
           TAG: ${{ steps.render.outputs.tag }}
