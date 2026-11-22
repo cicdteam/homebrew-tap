@@ -1,0 +1,61 @@
+name: Update
+
+# Follows the newest ldaplens release: once a day, by hand after a release,
+# and on every push, which also checks the formula installs and runs. The
+# workflow's own token is enough; no other repository holds a key to this one.
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # commit the new formula
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Render the formula for the latest release
+        id: render
+        run: |
+          tag=$(gh release view --repo cicdteam/ldaplens --json tagName --jq .tagName)
+          gh release download "$tag" --repo cicdteam/ldaplens --pattern ldaplens_checksums.txt --dir "$RUNNER_TEMP"
+          sh render.sh "$tag" "$RUNNER_TEMP/ldaplens_checksums.txt"
+          echo "tag=$tag" >>"$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Commit a changed formula
+        run: |
+          git diff --quiet && { echo "formula is up to date with $TAG"; exit 0; }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am "ldaplens ${TAG#v}"
+          git push
+        env:
+          TAG: ${{ steps.render.outputs.tag }}
+
+  # Installs from the tap as a user would, on both macOS architectures, after
+  # the update above has pushed.
+  install:
+    needs: update
+    strategy:
+      matrix:
+        runner: [macos-26, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - run: |
+          brew tap cicdteam/tap
+          brew install cicdteam/tap/ldaplens
+          brew test cicdteam/tap/ldaplens
+          ldaplens --version
