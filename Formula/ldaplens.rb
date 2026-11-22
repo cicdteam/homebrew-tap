@@ -2,28 +2,28 @@
 class Ldaplens < Formula
   desc "Web UI to browse, search and edit LDAP: OpenLDAP and Active Directory"
   homepage "https://github.com/cicdteam/ldaplens"
-  version "1.7.2"
+  version "1.7.3"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.2/ldaplens_Darwin_arm64.tar.gz"
-      sha256 "c2efabd5313e87f11cf77ac243fd8727c5caf7ef082d8f65fe9d858dd3a06fd2"
+      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.3/ldaplens_Darwin_arm64.tar.gz"
+      sha256 "fcae2a0ab003d779bbe8f2d78ee1365d907d21e93f6ee327217ab251f2bd42bd"
     end
     on_intel do
-      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.2/ldaplens_Darwin_x86_64.tar.gz"
-      sha256 "04b5d8193f1e29f7147d7b7eb7b559cfdf4f13aed5ef2a661fc39fce837eca6a"
+      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.3/ldaplens_Darwin_x86_64.tar.gz"
+      sha256 "e4ac520b236af67edf6b0d890480cd753d7bd99d0d0daebd0555bad239c304fa"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.2/ldaplens_Linux_aarch64.tar.gz"
-      sha256 "7f74ddf6bcbeb7a86d05612f82dbd1ec2edc11ceb4cbd0cc984139e20213206b"
+      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.3/ldaplens_Linux_aarch64.tar.gz"
+      sha256 "dc93cdf530bb986787423e0ba9f9b482f06f87c6d6fd86156e9ff34659263125"
     end
     on_intel do
-      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.2/ldaplens_Linux_x86_64.tar.gz"
-      sha256 "eb4a0b1234dac770a323bdcecb7f5201e7867026cecdbf52cf9c05ce6d732d7c"
+      url "https://github.com/cicdteam/ldaplens/releases/download/v1.7.3/ldaplens_Linux_x86_64.tar.gz"
+      sha256 "b7ab224dc7a27cd4d96d435fed7925f4c7a266f11e876abfa7c92eeeb4059c2a"
     end
   end
 
